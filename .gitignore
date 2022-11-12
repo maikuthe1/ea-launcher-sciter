@@ -1,0 +1,7 @@
+build/
+.*/
+obj/
+.directory
+*.depend
+*.layout
+cmake-build*/
