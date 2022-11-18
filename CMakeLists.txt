@@ -1,6 +1,7 @@
 cmake_minimum_required(VERSION 3.0)
 
 project(ea-launcher-sciter)
+set(CMAKE_CXX_STANDARD 17)
 
 if(UNIX AND NOT APPLE)
   find_package(PkgConfig REQUIRED)

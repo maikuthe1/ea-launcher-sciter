@@ -10,37 +10,42 @@ function log(str)
   console.log(str);
 }
 
-const selfVersion = "1";
+const selfVersion = "3";
 const versionFile = ".ver";
 var newestUrl;
 var newestSize;
 var pendingVersion;
-const apiUrl = "https://ever-endless.org/api/api.php?request=versions";
-const topPlayersApiUrl = "https://ever-endless.org/api/top.php?num=200";
-const launcherApiUrl = "http://127.0.0.1/api/api.php?request=launcher_update&version=";
+const apiUrl = "http://endless-adventures.ddns.net/api/api.php?request=versions";
+const topPlayersApiUrl = "http://endless-adventures.ddns.net/api/top.php?num=200";
+const launcherApiUrl = "http://endless-adventures.ddns.net/api/api.php?request=launcher_update&version=";
 
 async function RemoveOldArchive()
 {
-    if(sys.fs.$stat("eve.zip"))
+    while(sys.fs.$stat("eve.zip"))
         await sys.fs.unlink("eve.zip");
 }
 
-function ShouldUpdateSelf() {
+async function ShouldUpdateSelf() {
     log(Window.this.frame.getFirstArg());
     if(Window.this.frame.getFirstArg() == "update_self") {
-        if(sys.fs.$stat("eve-launcher-sciter"))
-            sys.fs.unlink("eve-launcher-sciter");
-        if(sys.fs.$stat("eve-launcher-sciter.exe"))
-            sys.fs.unlink("eve-launcher-sciter.exe");
-        sys.fs.copyfile("launcher_update", "eve-launcher-sciter");
-        env.launch("launcher_update.exe updated");
+        log("FROM CLIENT: update_self");
+        //if(sys.fs.$stat("endless-adventures"))
+            //sys.fs.unlink("endless-adventures");
+        //if(sys.fs.$stat("endless-adventures.exe"))
+            await sys.fs.unlink("endless-adventures.exe");
+        await sys.fs.copyfile("launcher_update.exe", "endless-adventures.exe");
+        env.exec("endless-adventures.exe", "updated");
         Window.this.close(0);
     }
     if(Window.this.frame.getFirstArg() == "updated") {
-        if(sys.fs.$stat("launcher_update"))
-            sys.fs.unlink("launcher_update");
-        if(sys.fs.$stat("launcher_update.exe"))
+        log("FROM CLIENT: updated");
+        //if(sys.fs.$stat("launcher_update"))
+            //sys.fs.unlink("launcher_update");
+        while(sys.fs.$stat("launcher_update.exe"))
+        {
             sys.fs.unlink("launcher_update.exe");
+        }
+
     }
 }
 
@@ -113,8 +118,8 @@ async function CheckVersion() {
             await file.close();
     //         await env.exec("chmod", "777", "launcher_update");
     //         await env.launch("chmod 777 launcher_update")
-            await env.launch("launcher_update.exe update_self");
-            Window.this.close(0);
+            env.exec("launcher_update.exe", "update_self");
+            await Window.this.close(0);
         }
     }
     catch(e) { /* web server error */ }
@@ -169,7 +174,11 @@ async function CheckVersion() {
             // make a backup of the config folder before extracting the update
             if(sys.fs.$stat("game/config/"))
             {
-                sys.fs.rename("game/config/", "game/config_backup/");
+                await sys.fs.rename("game/config/", "game/config_backup/");
+            }
+            if(sys.fs.$stat("game/maps/"))
+            {
+                await sys.fs.rename("game/maps/", "game/maps_backup/");
             }
 
             Window.this.frame.extractUpdate();
@@ -180,10 +189,10 @@ async function CheckVersion() {
     else {
         // ready to play
         document.getElementById("loading-fill").style.width = "*";
-        document.getElementById("play-button").style.transform = "scale(1)";
-        document.getElementById("loading-container").style.visibility = "hidden";
+        //document.getElementById("play-button").style.transform = "scale(1)";
+        //document.getElementById("loading-container").style.visibility = "hidden";
         document.getElementById("progress-div").style.visibility = "hidden";
-        document.getElementById("loading-container").style.width = "0";
+        //document.getElementById("loading-container").style.width = "0";
     }
 }
 
@@ -199,16 +208,27 @@ async function extractionFinished() {
         if(sys.fs.$stat("game/config/"))
         {
             sys.fs.$readdir("game/config/").forEach(file => {
-                sys.fs.unlink("game/config/" + file.name);
+                await sys.fs.unlink("game/config/" + file.name);
             });
-            sys.fs.rmdir("game/config/");
+            await sys.fs.rmdir("game/config/");
         }
-        sys.fs.rename("game/config_backup/", "game/config/");
+        await sys.fs.rename("game/config_backup/", "game/config/");
+    }
+    if(sys.fs.$stat("game/maps_backup/"))
+    {
+        if(sys.fs.$stat("game/config/"))
+        {
+            sys.fs.$readdir("game/maps/").forEach(file => {
+                await sys.fs.unlink("game/maps/" + file.name);
+            });
+            await sys.fs.rmdir("game/maps/");
+        }
+        await sys.fs.rename("game/maps_backup/", "game/maps/");
     }
 
-    document.getElementById("play-button").style.transform = "scale(1)";
-    document.getElementById("loading-container").style.visibility = "hidden";
-    document.getElementById("loading-container").style.width = "0";
+    //document.getElementById("play-button").style.transform = "scale(1)";
+    //document.getElementById("loading-container").style.visibility = "hidden";
+    //document.getElementById("loading-container").style.width = "0";
     document.getElementById("progress-div").style.visibility = "hidden";
     PlayGame();
 }
@@ -245,10 +265,10 @@ function OnDownloadProgress(downloadedBytes, totalBytes) {
      document.getElementById("loading-fill").style.width = "calc(" + Math.round(100 * downloadedBytes / totalBytes) + "%)";
 }
 
-function PlayGame() {
-    env.exec("cd", "game");
-    env.launch("game/ever-endless.exe");
-    env.exec("cd", "..");
+async function PlayGame() {
+    Window.this.frame.switchToGameDirectory();
+    await env.launch("Endless.exe");
+    Window.this.frame.switchToExecDirectory();
 }
 
 document.getElementById("play-button").onclick = async function() {
@@ -256,25 +276,25 @@ document.getElementById("play-button").onclick = async function() {
 };
 
 document.getElementById("discord-link").onclick = async function() {
-    env.launch("https://discord.gg/34HqRDx429");
+    //env.launch("https://discord.gg/34HqRDx429");
 };
 
 document.getElementById("youtube-link").onclick = async function() {
-    env.launch("https://www.youtube.com/channel/UCNnByakUqc79kPK5X7KuCdg");
+    //env.launch("https://www.youtube.com/channel/UCNnByakUqc79kPK5X7KuCdg");
 };
 
 document.getElementById("twitter-link").onclick = async function() {
-    env.launch("https://twitter.com/ever-endless");
+    //env.launch("https://twitter.com/ever-endless");
 };
 
 document.getElementById("patreon-link").onclick = async function() {
-    env.launch("https://www.patreon.com/user/membership?u=79352386");
+    //env.launch("https://www.patreon.com/user/membership?u=79352386");
 };
 
 
 document.on("click", "a[href^=http]", function(evt, a) {
    var url = a.attributes["href"];
-   env.launch(url);
+   //env.launch(url);
 });
 
 

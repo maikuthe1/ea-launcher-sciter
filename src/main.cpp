@@ -13,13 +13,23 @@ public:
   SOM_PASSPORT_BEGIN(frame)
     SOM_FUNCS(
       SOM_FUNC(extractUpdate),
-      SOM_FUNC(getFirstArg)
+      SOM_FUNC(getFirstArg),
+      SOM_FUNC(switchToGameDirectory),
+      SOM_FUNC(switchToExecDirectory)
     )
   SOM_PASSPORT_END
 
   void extractUpdate() {
     elz::extractZip("eve.zip", "game/");
     call_function("extractionFinished");
+  }
+
+  void switchToGameDirectory() {
+      std::filesystem::current_path("game");
+  }
+
+  void switchToExecDirectory() {
+      std::filesystem::current_path("..");
   }
 
   sciter::string getFirstArg() {

@@ -23,9 +23,12 @@
 
 html {
     background: #282828;
-    background-image: url("images/banner.png");
+    background-image: url("images/00266.png");
     background-repeat: no-repeat;
-    background-size: 100% 100%;
+    background-position: center;
+    background-attachment: cover;
+    background-color: white;
+
     padding: 0dip;
     margin: 0dip;
     overflow: hidden;
@@ -33,23 +36,27 @@ html {
 
 body {
     margin: 0dip;
-    padding: 0dip;
+    padding: 3dip;
     font-family: 'Roboto-Light';
     overflow: hidden;
+            background: rgba(255,255,255,0.3);
+    backdrop-filter: blur(10dip);
 }
 
 #top-bar {
-    position: absolute;
-    top: 0dip;
-    left: 0dip;
+    border-radius: 6dip;
+    padding-left: 75dip;
     height: 50dip;
-    background: rgba(236, 226, 215, 0.8);
-    border-bottom: 1px solid rgba(211,188,163,0.8);
-    width: *;
-    box-shadow: 0dip 6dip 0dip rgba(0,0,0,0.5);
+    background: rgba(255, 255, 255, 0.85);
+/*     background: linear-gradient(0deg, rgba(231,231,231,1) 0%, rgba(231,231,231,1) 40%, rgba(255,255,255,0.5) 100%); */
+/*     background: linear-gradient(270deg, rgba(255,255,255,1) 0%, rgba(255,255,255,0.75) 100%); */
+/*     background: white; */
+    border: 1px solid rgba(211,188,163,0.8);
+    box-shadow: 1dip 3dip 3dip rgba(0,0,0,0.25);
     flow: horizontal;
-    backdrop-filter: blur(20dip);
+    backdrop-filter: blur(10dip);
     z-index: 101;
+    width: *;
 }
 
 #socials {
@@ -107,6 +114,10 @@ body {
 
 #logo {
     margin: 3dip;
+    z-index: 9999;
+    position: absolute;
+    top: 3dip;
+    left: 3dip;
 }
 
 #navigation {
@@ -116,6 +127,7 @@ body {
     flow: horizontal;
     vertical-align: center;
     margin-left: 6dip;
+    z-index: 101;
 }
 
 #navigation > div{
@@ -125,7 +137,7 @@ body {
     margin-top: *;
     margin-bottom: *;
     font-family: 'VarelaRound-Regular';
-    color: #8f8479;
+    color: rgba(30, 30, 30, 1);
     font-weight: normal;
     background: rgba(255,255,255, 0);
     transition: background ease 100ms;
@@ -136,7 +148,7 @@ body {
     height: *;
     width: 20dip;
     margin-right: 3dip;
-    fill: #8f8479;
+    fill: rgba(50, 50, 50, 1);
 }
 
 .home {
@@ -160,6 +172,39 @@ body {
     transform: scale(0.9);
 }
 
+#news-container {
+    width: *;
+    height:  *;
+    overflow-y: auto;
+    margin-top: 3dip;
+    margin-bottom: 3dip;
+    flow: vertical;
+}
+
+#news-container > div {
+    width: *;
+    height: max-content;
+    border-radius: 6dip;
+    box-shadow: 3dip 1dip 3dip rgba(0,0,0,0.2);
+    border: 1px solid rgba(0,0,0,0.1);
+    padding: 3dip;
+    margin-bottom: 3dip;
+    background: rgba(255, 255, 255, 0.5);
+}
+
+#news-container > div:nth-child(1) {
+    background: rgba(255, 255, 255, 0.8);
+}
+
+#news-container > div:nth-child(2) {
+    background: rgba(255, 255, 255, 0.7);
+}
+
+#news-container > div:nth-child(3) {
+    background: rgba(255, 255, 255, 0.6);
+}
+
+
 #navigation > div:hover {
     transition: background ease 100ms;
     background: rgba(255,255,255, 0.5);
@@ -177,7 +222,7 @@ body {
 
 a {
     margin-right: 10dip;
-    color: #8f8479;
+    color: rgba(50, 50, 50, 1);
     text-decoration: none;
 }
 
@@ -195,16 +240,16 @@ a:hover {
     margin: 3dip;
     height: *;
     vertical-align: middle;
-    transform: scale(0);
-    transition: transform bounce-in 300ms;
+    transition: transform bounce-in 150ms;
     display: flex;
     justify-content: center;
     align-items: center;
     padding: 12dip;
+    padding-left: 24dip;
+    padding-right: 24dip;
     font-size: 14pt;
-    width: *;
+    width: max-content;
     text-shadow: 1dip 1dip 0dip rgba(0,0,0,0.2);
-    visibility: hidden;
 }
 
 #play-button:hover {
@@ -227,13 +272,14 @@ a:hover {
 #main-container {
     flow: grid(1, 2);
     size: *;
+    z-index: 50;
 }
 
 #top-container {
     height: 1*;
     width: *;
-    padding: 6dip;
-    padding-top: 55dip;
+    padding: 0dip;
+    padding-top: 0dip;
     flow: horizontal;
 }
 
@@ -245,8 +291,9 @@ a:hover {
     margin: 0dip;
     border-radius: 0dip;
     background: rgba(40,40,40,0.8);
-    box-shadow: 0dip -6dip 3dip rgba(0,0,0,0.2);
-    backdrop-filter: blur(20dip);
+    box-shadow: 1dip 3dip 3dip rgba(0,0,0,0.2);
+    border-radius: 6dip;
+    backdrop-filter: blur(6dip);
 }
 
 #loading-container {
@@ -256,6 +303,34 @@ a:hover {
     margin-right: 3dip;
     border-radius: 3dip;
     border: 1dip solid #232323;
+}
+
+#vertical-nav {
+    flow: vertical;
+    width: max-content;
+}
+
+#vertical-nav > .nav-icon {
+    height: 20dip;
+    width: 20dip;
+    fill: rgba(50, 50, 50, 1);
+}
+
+#vertical-nav > .link:active {
+    transform: scale(0.9);
+}
+
+#vertical-nav > .link:hover {
+    transition: background ease 100ms;
+    background: rgba(255,255,255, 0.5);
+    box-shadow: 3dip 3dip 2dip rgba(0,0,0,0.1);
+    cursor: pointer;
+    transform: scale(1.1);
+    color: black;
+}
+
+#vertical-nav > .link:hover > .nav-icon {
+    fill: black;
 }
 
 #loading-fill {
@@ -275,13 +350,18 @@ output{
 }
 
 .content-box {
-    border-radius: 3dip;
+    border-radius: 6dip;
     background: rgba(255,255,255,0.8);
-    box-shadow: 3dip 3dip 0dip rgba(0,0,0,0.2);
+    backdrop-filter: blur(10dip);
+/*     background: white; */
+    box-shadow: 3dip 1dip 3dip rgba(0,0,0,0.2);
     height: *;
-    backdrop-filter: blur(20dip);
     border: 1px solid rgba(0,0,0,0.1);
     padding: 3dip;
+    z-index: 50;
+    margin-top: 3dip;
+    margin-bottom: 3dip;
+    margin-right: 6dip;
 }
 
 #patch-notes-box {
